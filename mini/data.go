@@ -16,6 +16,12 @@ type (
 		SessionKey string `form:"session_key" json:"session_key"`
 	}
 
+	ImageResponse struct {
+		ErrorCode int    `form:"errcode" json:"errcode"`
+		ErrorMsg  string `form:"errmsg" json:"errmsg"`
+		Data      string `form:"data" json:"data"`
+	}
+
 	UserInfoResponse struct {
 		Code          string `form:"code" json:"code"`
 		RawData       string `form:"rawData" json:"rawData"`

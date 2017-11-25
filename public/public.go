@@ -38,7 +38,7 @@ type (
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  * 初始化WeChat公众号
  * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-func NewPublic(clientId, clientSecret string) IMini {
+func NewPublic(clientId, clientSecret string) IPublic {
 	public := new(Public)
 	public.ClientId = clientId
 	public.ClientSecret = clientSecret

@@ -28,8 +28,8 @@ type (
 		SetUri(uriType MiniUriType, uri string)
 
 		GetUserInfo(code, encryptedData, iv string) (*UserInfo, error)
-		GetMiniCodeImage(accessToken, path string, args ...int) (string, error)
-		GetQrCodeImage(accessToken, path string, args ...int) (string, error)
+		GetMiniCodeImage(accessToken, path string, args ...int) (*ImageResponse, error)
+		GetQrCodeImage(accessToken, path string, args ...int) (*ImageResponse, error)
 
 		GetSessionKey(code string) (*SessionKeyResponse, error)
 		Decrypt(sessionKey, sourceData, iv string) (string, error)
@@ -148,7 +148,9 @@ func (s *Mini) GetUserInfo(code, encryptedData, iv string) (*UserInfo, error) {
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  * 获取小程序的小程序码图片
  * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-func (s *Mini) GetMiniCodeImage(accessToken, path string, args ...int) (string, error) {
+func (s *Mini) GetMiniCodeImage(accessToken, path string, args ...int) (*ImageResponse, error) {
+	var imageResponse *ImageResponse
+
 	width := 300
 	if len(args) > 0 {
 		width = args[0]
@@ -165,14 +167,24 @@ func (s *Mini) GetMiniCodeImage(accessToken, path string, args ...int) (string, 
 
 	//获取api响应数据
 	data, err := glib.HttpPost(url, queryString)
+	if err == nil {
+		//解析json数据
+		if err := glib.FromJson(data, &imageResponse); err != nil {
+			imageResponse = &ImageResponse{
+				Data: data,
+			}
+		}
+	}
 
-	return data, err
+	return imageResponse, err
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  * 获取小程序的Qr二维码图片
  * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-func (s *Mini) GetQrCodeImage(accessToken, path string, args ...int) (string, error) {
+func (s *Mini) GetQrCodeImage(accessToken, path string, args ...int) (*ImageResponse, error) {
+	var imageResponse *ImageResponse
+
 	width := 300
 	if len(args) > 0 {
 		width = args[0]
@@ -189,8 +201,16 @@ func (s *Mini) GetQrCodeImage(accessToken, path string, args ...int) (string, er
 
 	//获取api响应数据
 	data, err := glib.HttpPost(url, queryString)
+	if err == nil {
+		//解析json数据
+		if err := glib.FromJson(data, &imageResponse); err != nil {
+			imageResponse = &ImageResponse{
+				Data: data,
+			}
+		}
+	}
 
-	return data, err
+	return imageResponse, err
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
