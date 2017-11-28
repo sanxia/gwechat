@@ -35,7 +35,7 @@ type (
 		UnionId    string    `form:"unionId" json:"unionId"`
 		Nickname   string    `form:"nickName" json:"nickName"`
 		Gender     string    `form:"gender" json:"gender"` //性别 0：未知、1：男、2：女
-		AvatarUrl  string    `form:"avatarUrl" json:"avatarUrl"`
+		Avatar     string    `form:"avatarUrl" json:"avatarUrl"`
 		City       string    `form:"city" json:"city"`
 		Province   string    `form:"province" json:"province"`
 		Country    string    `form:"country" json:"country"`
