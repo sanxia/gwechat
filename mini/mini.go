@@ -113,6 +113,7 @@ func (s *Mini) SetUri(uriType MiniUriType, uri string) {
  * }
  * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 func (s *Mini) GetUserInfo(code, encryptedData, iv string) (*UserInfo, error) {
+	var userInfoData *UserInfoData
 	var userInfo *UserInfo
 
 	//获取会话key
@@ -126,20 +127,28 @@ func (s *Mini) GetUserInfo(code, encryptedData, iv string) (*UserInfo, error) {
 		return nil, err
 	} else {
 		//解析json数据
-		glib.FromJson(data, &userInfo)
+		glib.FromJson(data, &userInfoData)
 	}
 
-	if userInfo != nil {
-		//附加上session_key
+	if userInfoData != nil {
+		userInfo = new(UserInfo)
 		userInfo.SessionKey = sessionKeyResponse.SessionKey
+		userInfo.UnionId = userInfoData.UnionId
+		userInfo.OpenId = userInfoData.OpenId
+		userInfo.Nickname = userInfoData.Nickname
+		userInfo.Avatar = userInfoData.AvatarUrl
+		userInfo.Gender = "secret" //默认未知
 
-		if userInfo.Gender == "0" {
-			userInfo.Gender = "secret"
-		} else if userInfo.Gender == "1" {
+		if userInfoData.Gender == 1 {
 			userInfo.Gender = "male"
-		} else if userInfo.Gender == "2" {
+		} else if userInfoData.Gender == 2 {
 			userInfo.Gender = "female"
 		}
+
+		userInfo.City = userInfoData.City
+		userInfo.Province = userInfoData.Province
+		userInfo.Country = userInfoData.Country
+		userInfo.Watermark = userInfoData.Watermark
 	}
 
 	return userInfo, nil
