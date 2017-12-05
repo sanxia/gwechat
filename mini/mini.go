@@ -25,6 +25,7 @@ type (
 	MiniUriType int
 
 	IMini interface {
+		GetClientId() string
 		SetUri(uriType MiniUriType, uri string)
 
 		GetUserInfo(code, encryptedData, iv string) (*UserInfo, error)
@@ -59,6 +60,13 @@ func NewMini(clientId, clientSecret string) IMini {
 	mini.qrCodeUri = "https://api.weixin.qq.com/cgi-bin/wxaapp/createwxaqrcode"
 
 	return mini
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * 获取ClientId
+ * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+func (s *Mini) GetClientId() string {
+	return s.ClientId
 }
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
